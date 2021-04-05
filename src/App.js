@@ -576,7 +576,7 @@ function getCurrentCity(event) {
           <h4 className="footer">
             &nbsp;
             <a
-              href="https://github.com/itelchan/"
+              href="https://github.com/itelchan/sunny-pony-weather-react"
               target="_blank"
               rel="noreferrer"
             >
