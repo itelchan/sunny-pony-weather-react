@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
 import axios from 'axios';
 
 import bannerImage from "../src/images/BannerSunnyPony.png";
@@ -38,7 +37,6 @@ function App() {
 
   let apiKey = "51856297f45d5f846d74fb84ab553047";
 
-  let pooString = "poo-storm-solid.png"; 
   let globalUnits = "metric";
   
   let globalWindSpeedms ;
@@ -46,12 +44,8 @@ function App() {
   
   let globalCityTempC ;
   let globalCityTempF ;
-  let globalFforecastMin = [0, 0, 0, 0, 0];
-  let globalCforecastMin = [0, 0, 0, 0, 0];
-  let globalFforecastMax = [0, 0, 0, 0, 0];
-  let globalCforecastMax = [0, 0, 0, 0, 0];
-  
-  let globalHour = 0;
+  // TODO 
+  //let globalHour = 0;
   
   let days = [
     "Sunday",
@@ -63,7 +57,8 @@ function App() {
     "Saturday"
   ];
   
-  let littleDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  //TODO
+  //let littleDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   
   let months = [
     "Jan",
@@ -111,7 +106,7 @@ function App() {
     let hours = Number(now.getHours());
     let minutes = Number(now.getMinutes());
     //For the week forecast we need the current hour to find the optimal position of the next day
-    globalHour = hours;
+    //globalHour = hours; TODO
   
     return `${day} ${now.getDate()} ${month} ${formatTime(hours)}:${formatTime(
       minutes
@@ -128,7 +123,7 @@ function App() {
 
      if(globalUnitsDisplay !== globalUnits ){
      setglobalUnitsDisplay(globalUnits);
-//TODO
+
      setGlobalTempDisplay(`${Math.round(metricImperialVars.cityTempC)} °C`);
      setGlobalWindDisplay(`${Math.round(metricImperialVars.windSpeedms)} m/s`);
      }
@@ -140,7 +135,7 @@ function App() {
 
     if(globalUnitsDisplay !== globalUnits ){
     setglobalUnitsDisplay(globalUnits);
-//TODO
+
     setGlobalTempDisplay(`${Math.round(metricImperialVars.cityTempF)} °F`);
     setGlobalWindDisplay(`${Math.round(metricImperialVars.windSpeedMH)} Miles/H`);
     }
@@ -220,7 +215,23 @@ function App() {
     setUpdateDisplay(true);
   }
 
-  function displayForecastDayName(dayNumberToForecast, timestamp) {
+  function displayMinMax()
+  {
+
+    setGlobalForecastMinDisplay0('13 °C');
+    setGlobalForecastMinDisplay1('13 °C');
+    setGlobalForecastMinDisplay2('13 °C');
+    setGlobalForecastMinDisplay3('13 °C');
+    setGlobalForecastMinDisplay4('13 °C');
+
+    setGlobalForecastMaxDisplay0('27 °C');
+    setGlobalForecastMaxDisplay1('27 °C');
+    setGlobalForecastMaxDisplay2('27 °C');
+    setGlobalForecastMaxDisplay3('27 °C');
+    setGlobalForecastMaxDisplay4('27 °C');
+
+  }
+ /* function displayForecastDayName(dayNumberToForecast, timestamp) {
     //Calculate the day to be updated
    // let idName = "#forecastNameDay" + dayNumberToForecast;
    // let dayName = document.querySelector(idName);
@@ -231,6 +242,7 @@ function App() {
   
     // seach fo the day abbreviation in the array
     let calcShortName = littleDays[dayD];
+    
     //dayName.innerHTML = calcShortName;
   }
 
@@ -239,7 +251,8 @@ function App() {
     let position = Math.round((24 - globalHour) / 3) + 1;
     return position;
   }
-  
+  */
+ /*
 function displayForecastFromResponse(response) {
   console.log(response.data);
   let forecastedDay = 0;
@@ -253,18 +266,18 @@ function displayForecastFromResponse(response) {
     i = i + offsetToNextDay
   ) {
     console.log(`i: ${i}, forecastedDay: ${forecastedDay} `);
-    let timestamp = response.data.list[i].dt;
-   /* displayForecastDayName(forecastedDay, timestamp);
+       let timestamp = response.data.list[i].dt;
+    displayForecastDayName(forecastedDay, timestamp);
     displayForecastMinMax(forecastedDay, i, response);
     console.log(response.data.list[i + midDayOffset]);
     displayForcastedWheatherIcon(
       forecastedDay,
       response.data.list[i + midDayOffset].weather[0].icon
-    ); */
+    ); 
     forecastedDay++;
   }
 }
-
+*/
   ////////////////// Current Position calculations ///////////
 
 function calculateURLWithCurrentPosition(position) {
@@ -276,7 +289,8 @@ function calculateURLWithCurrentPosition(position) {
 
   let forecasturl = `https://api.openweathermap.org/data/2.5/forecast?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${globalUnits}`;
   console.log(forecasturl);
-  axios.get(forecasturl).then(displayForecastFromResponse);
+  //axios.get(forecasturl).then(displayForecastFromResponse);
+  displayMinMax();
 }
 
 function getCurrentCity(event) {
@@ -527,8 +541,8 @@ function getCurrentCity(event) {
 
                     <div className="card-body cardBodyTemp">
                       <p className="card-text">
-                        <span id="forecastMin3">13°C</span> |{" "}
-                        <span id="forecastMax3">26°</span>
+                        <span id="forecastMin3">{globalForecastMinDisplay3}</span> |{" "}
+                        <span id="forecastMax3">{globalForecastMaxDisplay3}</span>
                       </p>
                     </div>
                   </div>
@@ -550,8 +564,8 @@ function getCurrentCity(event) {
                     />
                     <div className="card-body cardBodyTemp">
                       <p className="card-text">
-                        <span id="forecastMin4">13°C</span> |{" "}
-                        <span id="forecastMax4">26°</span>
+                        <span id="forecastMin4">{globalForecastMinDisplay4}</span> |{" "}
+                        <span id="forecastMax4">{globalForecastMaxDisplay4}</span>
                       </p>
                     </div>
                   </div>
