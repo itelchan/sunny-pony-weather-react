@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import "./App.css";
 
 import bannerImage from "../src/images/BannerSunnyPony.png";
 import pooImage from "../src/images/poo-storm-solid.png";
@@ -10,7 +11,7 @@ import humidityImage from "../src/images/humidity_pink.png";
 
 
 
-function App() {
+export default function App() {
 
   const [searchedCity, setSearchedCity] = useState("Mexico City");
   const [weatherResult, setWeatherResult] = useState({});
@@ -322,7 +323,7 @@ function getCurrentCity(event) {
           <div className="card-body">
             <p className="card-text">
               <div className="row searchingRow">
-                <form className="col-sm-12 searchingForm" id="sunnyPonyForm" autoComplete="off" onSubmit={handleChange } >
+                <form className="col-sm-12 searchingForm" id="sunnyPonyForm" onSubmit={handleChange } >
                   <div className="form-row justify-content-center searchingFormRow">
                     <div className="col-5  searchingColumn">
                       <input
@@ -331,6 +332,7 @@ function getCurrentCity(event) {
                         id="inputCity1"
                         placeholder="City Name"
                         autoComplete="off"
+                        autoFocus ="on"
                         onChange={updateInputCity1}
                       />
                     </div>
@@ -603,4 +605,4 @@ function getCurrentCity(event) {
   );
 }
 
-export default App;
+
