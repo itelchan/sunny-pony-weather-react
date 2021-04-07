@@ -7,22 +7,20 @@ import pooImage from "../src/images/poo-storm-solid.png";
 import horseImage from "../src/images/horse_pink.png";
 import windImage from "../src/images/wind_pink.png";
 import humidityImage from "../src/images/humidity_pink.png";
-
+import { Ellipsis } from 'react-css-spinners'
 
 
 
 export default function App() {
 
   const [searchedCity, setSearchedCity] = useState("Mexico City");
-  const [weatherResult, setWeatherResult] = useState({});
+  const [weatherResult, setWeatherResult] = useState({updateDisplay: false});
   const [globalTempDisplay, setGlobalTempDisplay] = useState("");
   const [globalWindDisplay, setGlobalWindDisplay] = useState("");
   const [globalCurrentDateDisplay, setGlobalCurrentDateDisplay] =  useState("");
   const [globalUnitsDisplay, setglobalUnitsDisplay] = useState("metric");
 
   const[metricImperialVars, setMetricImperialVars] = useState({});
-
-  const[updateDisplay, setUpdateDisplay] = useState(false);
 
   const [globalForecastMinDisplay0, setGlobalForecastMinDisplay0] = useState('14 °C');
   const [globalForecastMinDisplay1, setGlobalForecastMinDisplay1] = useState('14 °C');
@@ -36,7 +34,7 @@ export default function App() {
   const [globalForecastMaxDisplay3, setGlobalForecastMaxDisplay3] = useState('25 °C');
   const [globalForecastMaxDisplay4, setGlobalForecastMaxDisplay4] = useState('25 °C');
 
-  let apiKey = "51856297f45d5f846d74fb84ab553047";
+  const apiKey = "51856297f45d5f846d74fb84ab553047";
 
   let globalUnits = "metric";
   
@@ -206,14 +204,12 @@ export default function App() {
       desc: response.data.weather[0].description,
       hum: response.data.main.humidity,
       wind: response.data.wind.speed,
-      wImage: response.data.weather[0].icon
+      wImage: response.data.weather[0].icon,
+      updateDisplay: true
     });
 
-
-    console.log(`weatherResult.temp ${weatherResult.temper}`);
     updateGlobalUnitsMetricImperial(response);
     setGlobalCurrentDateDisplay(calculateCurrentDate());
-    setUpdateDisplay(true);
   }
 
   function displayMinMax()
@@ -305,7 +301,7 @@ function getCurrentCity(event) {
   //////////////////////////////////////////////////////////////////////////
   ////////////////////// visible ///////////////////////////////////////////
 
-
+if(weatherResult.updateDisplay){
   return (
     <div className="App">
       <div className="mainContainer">
@@ -351,16 +347,16 @@ function getCurrentCity(event) {
                       <button
                         type="button"
                         onClick={changetoMetric}
-                        className="btn btn-info mx-sm-2 mb-2 shadow gradesButton"
+                        className="btn btn-info mx-sm-2 mb-1 shadow gradesButton"
                       >
-                        °C
+                      °C
                       </button>
                       <button
                         type="button"
                         onClick={changetoImperial}
-                        className="btn btn-info mx-sm-2 mb-2 shadow gradesButton"
+                        className="btn btn-info mx-sm-2 mb-1 shadow gradesButton"
                       >
-                        °F
+                      °F
                       </button>
                     </div>
                     <div className="col-1 currentLocColumn">
@@ -408,7 +404,7 @@ function getCurrentCity(event) {
                   <img
                     id="displayCurrentWeatherImage"
                     alt="CurrentWeather"
-                    src={updateDisplay ? displayWeatherIcon(): "poo-storm-solid.png"} 
+                    src={weatherResult.updateDisplay ? displayWeatherIcon(): "poo-storm-solid.png"} 
                     className="rounded mx-auto currentWeatherImage"
                   />
                 </div>
@@ -602,7 +598,20 @@ function getCurrentCity(event) {
         </div>
       </div>
     </div>
-  );
+  );}
+  else{
+    let defaultCity = "Mexico City"
+    let defaultApiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${defaultCity}&appid=${apiKey}&units=${globalUnits}`;
+    axios.get(defaultApiUrl).then(handleWeatherResponse);
+    return (
+    <div className="loading">
+      <Ellipsis color="#554971" size={90} />
+      Loading...
+    <Ellipsis color="#554971" size={90} />
+    </div>);
+  }
 }
+
+
 
 
