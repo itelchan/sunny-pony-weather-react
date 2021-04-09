@@ -1,6 +1,6 @@
-.App{
-    max-width:720px;
-    margin: 0 auto;
+.App {
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 h4 {
@@ -47,11 +47,11 @@ a {
   cursor: pointer;
 }
 
-.gradesButton{
-    padding-top:4px;
-    padding-bottom: 4px;
-    padding-left: 10px;
-    padding-right: 10px;
+.gradesButton {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .displayRow {
@@ -197,11 +197,10 @@ a {
   border: 0;
 }
 
-.loading{
-    margin: 0 auto;
-    position: center;
-    font-variant: normal;
-    font-weight:bolder;
-    font-size: 30px;
-
+.loading {
+  margin: 0 auto;
+  position: center;
+  font-variant: normal;
+  font-weight: bolder;
+  font-size: 30px;
 }
