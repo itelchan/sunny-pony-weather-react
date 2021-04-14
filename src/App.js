@@ -10,8 +10,9 @@ import { Ellipsis } from "react-css-spinners";
 export default function App() {
   const [searchedCity, setSearchedCity] = useState("Mexico City");
   const [weatherResult, setWeatherResult] = useState({ updateDisplay: false });
-  const [unitsResult, setUnitsResult] = useState({});
-  const [globalUnitsDisplay, setglobalUnitsDisplay] = useState("metric");
+  const [unitsResult, setUnitsResult] = useState({
+    globalUnitsDisplay: "metric",
+  });
   const [metricImperialVars, setMetricImperialVars] = useState({});
 
   const apiKey = "51856297f45d5f846d74fb84ab553047";
@@ -45,9 +46,9 @@ export default function App() {
     event.preventDefault();
     globalUnits = "metric";
     console.log(`changedtoMetric gloabalUnit= ${globalUnits}`);
-    setglobalUnitsDisplay(globalUnits);
 
     setUnitsResult({
+      globalUnitsDisplay: globalUnits,
       globalTempDisplay: `${Math.round(metricImperialVars.cityTempC)} °C`,
       globalWindDisplay: `${Math.round(metricImperialVars.windSpeedms)} m/s`,
     });
@@ -58,9 +59,9 @@ export default function App() {
     globalUnits = "imperial";
 
     console.log(`changedtoImperial gloabalUnit= ${globalUnits}`);
-    setglobalUnitsDisplay(globalUnits);
 
     setUnitsResult({
+      globalUnitsDisplay: globalUnits,
       globalTempDisplay: `${Math.round(metricImperialVars.cityTempF)} °F`,
       globalWindDisplay: `${Math.round(
         metricImperialVars.windSpeedMH
@@ -70,9 +71,9 @@ export default function App() {
 
   function updateGlobalUnitsMetricImperial(response) {
     console.log(
-      `updateGlobalUnitsMetricImperial gloabalUnit= ${globalUnitsDisplay}`
+      `updateGlobalUnitsMetricImperial gloabalUnit= ${unitsResult.globalUnitsDisplay}`
     );
-    if (globalUnitsDisplay === "metric") {
+    if (unitsResult.globalUnitsDisplay === "metric") {
       globalWindSpeedms = response.data.wind.speed;
       globalWindSpeedMH = calculateMilesPerHour(globalWindSpeedms);
 
@@ -80,6 +81,7 @@ export default function App() {
       globalCityTempF = calculateFahrenheit(globalCityTempC);
 
       setUnitsResult({
+        globalUnitsDisplay: "metric",
         globalTempDisplay: `${Math.round(globalCityTempC)} °C`,
         globalWindDisplay: `${Math.round(globalWindSpeedms)} m/s`,
       });
@@ -91,6 +93,7 @@ export default function App() {
       globalCityTempC = calculateCentigrades(globalCityTempF);
 
       setUnitsResult({
+        globalUnitsDisplay: "imperial",
         globalTempDisplay: `${Math.round(globalCityTempF)} °F`,
         globalWindDisplay: `${Math.round(globalCityTempC)} Miles/H`,
       });
@@ -110,15 +113,17 @@ export default function App() {
 
   const handleChange = (event) => {
     event.preventDefault();
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&appid=${apiKey}&units=${globalUnitsDisplay}`;
+    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&appid=${apiKey}&units=${unitsResult.globalUnitsDisplay}`;
     axios.get(apiUrl).then(handleWeatherResponse);
   };
 
   function handleWeatherResponse(response) {
+    console.log(`handleWeatherResponse`);
     console.log(response.data);
 
     setWeatherResult({
       cityName: response.data.name,
+      coordinates: response.data.coord,
       countryName: response.data.sys.country,
       temper: response.data.main.temp,
       date: new Date(response.data.dt * 1000),
@@ -130,85 +135,19 @@ export default function App() {
     });
 
     updateGlobalUnitsMetricImperial(response);
-    // setGlobalCurrentDateDisplay(calculateCurrentDate());
   }
 
-  /*
-  function displayMinMax()
-  {
-
-    setGlobalForecastMinDisplay0('13 °C');
-    setGlobalForecastMinDisplay1('13 °C');
-    setGlobalForecastMinDisplay2('13 °C');
-    setGlobalForecastMinDisplay3('13 °C');
-    setGlobalForecastMinDisplay4('13 °C');
-
-    setGlobalForecastMaxDisplay0('27 °C');
-    setGlobalForecastMaxDisplay1('27 °C');
-    setGlobalForecastMaxDisplay2('27 °C');
-    setGlobalForecastMaxDisplay3('27 °C');
-    setGlobalForecastMaxDisplay4('27 °C');
-
-  }
-  */
-  /* function displayForecastDayName(dayNumberToForecast, timestamp) {
-    //Calculate the day to be updated
-   // let idName = "#forecastNameDay" + dayNumberToForecast;
-   // let dayName = document.querySelector(idName);
-  
-    //Get the number of the corresponding name
-    let dateD = new Date(timestamp * 1000);
-    let dayD = dateD.getDay();
-  
-    // seach fo the day abbreviation in the array
-    let calcShortName = littleDays[dayD];
-    
-    //dayName.innerHTML = calcShortName;
-  }
-
-  function calculateForecastPositionForTomorrow() {
-    // Move 1 position to be sure we are in the next day
-    let position = Math.round((24 - globalHour) / 3) + 1;
-    return position;
-  }
-  */
-  /*
-function displayForecastFromResponse(response) {
-  console.log(response.data);
-  let forecastedDay = 0;
-  let calculatedDay = 0;
-  let i = 0;
-  let offsetToNextDay = 8;
-  let midDayOffset = 3; // change to 2 or 3 , depending whats more interesting
-  for (
-    i = calculateForecastPositionForTomorrow();
-    i < (40 - midDayOffset);
-    i = i + offsetToNextDay
-  ) {
-    console.log(`i: ${i}, forecastedDay: ${forecastedDay} `);
-       let timestamp = response.data.list[i].dt;
-    displayForecastDayName(forecastedDay, timestamp);
-    displayForecastMinMax(forecastedDay, i, response);
-    console.log(response.data.list[i + midDayOffset]);
-    displayForcastedWheatherIcon(
-      forecastedDay,
-      response.data.list[i + midDayOffset].weather[0].icon
-    ); 
-    forecastedDay++;
-  }
-}
-*/
   ////////////////// Current Position calculations ///////////
 
   function calculateURLWithCurrentPosition(position) {
     let currentLat = position.coords.latitude;
     let currentLon = position.coords.longitude;
 
-    let currenturl = `https://api.openweathermap.org/data/2.5/weather?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${globalUnitsDisplay}`;
+    let currenturl = `https://api.openweathermap.org/data/2.5/weather?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${unitsResult.globalUnitsDisplay}`;
     axios.get(currenturl).then(handleWeatherResponse);
 
-    let forecasturl = `https://api.openweathermap.org/data/2.5/forecast?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${globalUnitsDisplay}`;
-    console.log(forecasturl);
+    //  let forecasturl = `https://api.openweathermap.org/data/2.5/forecast?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${unitsResult.globalUnitsDisplay}`;
+    // console.log(forecasturl);
     //axios.get(forecasturl).then(displayForecastFromResponse);
     //displayMinMax();
   }
@@ -299,7 +238,6 @@ function displayForecastFromResponse(response) {
                     </div>
                   </form>
                 </div>
-
                 <Weather wResult={weatherResult} uResult={unitsResult} />
               </p>
             </div>
@@ -308,21 +246,21 @@ function displayForecastFromResponse(response) {
               <a
                 href="https://github.com/itelchan/sunny-pony-weather-react"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Open-source code by:
               </a>
               <a
                 href="https://commons.wikimedia.org/wiki/User:Itelchan"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Leticia Garcia &nbsp;
               </a>
               <a
                 href="https://de.linkedin.com/in/leticia-garcia-herrera-698554b3"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 *LinkedIn &nbsp;
               </a>

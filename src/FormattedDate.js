@@ -1,9 +1,4 @@
-import React from "react";
-
 export default function FormattedDate(props) {
-  // TODO
-  //let globalHour = 0;
-
   let days = [
     "Sunday",
     "Monday",
@@ -13,9 +8,6 @@ export default function FormattedDate(props) {
     "Friday",
     "Saturday",
   ];
-
-  //TODO
-  //let littleDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   let months = [
     "Jan",
@@ -58,6 +50,6 @@ export default function FormattedDate(props) {
   }
 
   //////////// DATE DISPLAY //////////////////////
-  //console.log(` date is : ${props.date}`);
+  // console.log(` date is : ${props.date}`);
   return calculateCurrentDate(props.date);
 }
