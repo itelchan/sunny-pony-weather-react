@@ -146,10 +146,6 @@ export default function App() {
     let currenturl = `https://api.openweathermap.org/data/2.5/weather?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${unitsResult.globalUnitsDisplay}`;
     axios.get(currenturl).then(handleWeatherResponse);
 
-    //  let forecasturl = `https://api.openweathermap.org/data/2.5/forecast?lat=${currentLat}&lon=${currentLon}&appid=${apiKey}&units=${unitsResult.globalUnitsDisplay}`;
-    // console.log(forecasturl);
-    //axios.get(forecasturl).then(displayForecastFromResponse);
-    //displayMinMax();
   }
 
   function getCurrentCity(event) {
@@ -157,7 +153,7 @@ export default function App() {
     navigator.geolocation.getCurrentPosition(calculateURLWithCurrentPosition);
   }
 
-  //////////////////////////////////////////////////////////////////////////
+
   //////////////////////////////////////////////////////////////////////////
   ////////////////////// visible ///////////////////////////////////////////
 
